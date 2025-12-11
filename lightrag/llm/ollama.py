@@ -172,7 +172,7 @@ async def ollama_model_complete(
     )
 
 
-@wrap_embedding_func_with_attrs(embedding_dim=1024, max_token_size=8192)
+@wrap_embedding_func_with_attrs(embedding_dim=768, max_token_size=8192)
 async def ollama_embed(
     texts: list[str], embed_model: str = "bge-m3:latest", **kwargs
 ) -> np.ndarray:
