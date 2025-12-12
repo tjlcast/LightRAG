@@ -144,7 +144,10 @@ entity<|#|>Project Gutenberg<|#|>Organization<|#|>Project Gutenberg is an organi
 - 第二次提取:
   - [_process_extraction_result](../lightrag/operate.py#L2883)
   - 注意: 输入内容为当前的chunk, "补全提取"的提示词 和 "第一次的LLM输入输出结果"
-
+- 合并上面两次的提取
+  - [_process_extraction_result](../lightrag/operate.py#L2893)
+  - 对于第一次存在的节点和边主要更新其中的"description", "合并"策略为保留较长的"description"
+  - 
 
 ### 实体的格式
 对于每个实体原始内容如下:
