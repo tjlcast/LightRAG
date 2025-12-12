@@ -3,7 +3,7 @@
 
 ## 实体和关系抽取的关键代码位置
 
-### 1. 入口点：[extract_entities](file://c:\Users\phx10\code\LightRAG\lightrag\operate.py#L2767-L3009) 函数
+### 1. 入口点：[extract_entities](..\lightrag\operate.py#L2767-L3009) 函数
 文件路径：`lightrag/operate.py`
 行号：约2767行开始
 
@@ -18,7 +18,7 @@ async def extract_entities(
 这个函数遍历所有的文本块（chunks），对每个文本块进行实体和关系抽取。
 
 ### 2. 处理单个chunk的核心函数：`_process_single_content`
-文件路径：`lightrag/operate.py`
+文件路径：`lightrag/operate.py` [_process_single_content](..\lightrag\operate.py#L2816)
 行号：约2815行开始
 
 ```python
@@ -59,7 +59,7 @@ final_result, timestamp = await use_llm_func_with_cache(
 )
 ```
 
-### 4. 解析LLM抽取结果：[_process_extraction_result](file://c:\Users\phx10\code\LightRAG\lightrag\operate.py#L909-L1031)
+### 4. 解析LLM抽取结果：[_process_extraction_result](..\lightrag\operate.py#L909-L1031)
 文件路径：`lightrag/operate.py`
 行号：约909行开始
 
@@ -79,7 +79,7 @@ async def _process_extraction_result(
 1. 将LLM输出按分隔符分割成记录
 2. 对每条记录，尝试解析为实体或关系
 
-### 5. 解析单个实体：[_handle_single_entity_extraction](file://c:\Users\phx10\code\LightRAG\lightrag\operate.py#L378-L447)
+### 5. 解析单个实体：[_handle_single_entity_extraction](..\lightrag\operate.py#L378-L447)
 文件路径：`lightrag/operate.py`
 行号：约378行开始
 
@@ -92,7 +92,7 @@ async def _handle_single_entity_extraction(
 ):
 ```
 
-### 6. 解析单个关系：[_handle_single_relationship_extraction](file://c:\Users\phx10\code\LightRAG\lightrag\operate.py#L450-L529)
+### 6. 解析单个关系：[_handle_single_relationship_extraction](..\lightrag\operate.py#L450-L529)
 文件路径：`lightrag/operate.py`
 行号：约450行开始
 
