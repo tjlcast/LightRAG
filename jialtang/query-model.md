@@ -32,11 +32,11 @@
    - 适用于不需要检索外部知识的通用问答
 
 每种模式都有其适用场景：
-- 当你需要简单的文本匹配时，可以使用[naive](file://c:\Users\phx10\code\LightRAG\lightrag\api\routers\ollama_api.py#L18-L18)模式
-- 当你想深入了解特定实体相关信息时，使用[local](file://c:\Users\phx10\code\LightRAG\lightrag\api\routers\ollama_api.py#L19-L19)模式
+- 当你需要简单的文本匹配时，可以使用[naive](..\lightrag\api\routers\ollama_api.py#L18-L18)模式
+- 当你想深入了解特定实体相关信息时，使用[local](..\lightrag\api\routers\ollama_api.py#L19-L19)模式
 - 当你需要理解全局关系和宏观概念时，使用`global`模式
-- 当你希望得到更全面的结果时，使用[hybrid](file://c:\Users\phx10\code\LightRAG\lightrag\api\routers\ollama_api.py#L21-L21)或[mix](file://c:\Users\phx10\code\LightRAG\lightrag\api\routers\ollama_api.py#L22-L22)模式
-- 当你只需要LLM自身知识回答问题时，使用[bypass](file://c:\Users\phx10\code\LightRAG\lightrag\api\routers\ollama_api.py#L23-L23)模式
+- 当你希望得到更全面的结果时，使用[hybrid](..\lightrag\api\routers\ollama_api.py#L21-L21)或[mix](..\lightrag\api\routers\ollama_api.py#L22-L22)模式
+- 当你只需要LLM自身知识回答问题时，使用[bypass](..\lightrag\api\routers\ollama_api.py#L23-L23)模式
 
 你可以通过在QueryParam中设置mode参数来选择不同的查询模式，例如：
 ```python
