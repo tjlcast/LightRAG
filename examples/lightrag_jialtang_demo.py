@@ -6,6 +6,7 @@ import logging.config
 from lightrag import LightRAG, QueryParam
 from lightrag.llm.ollama import ollama_model_complete, ollama_embed
 from lightrag.utils import EmbeddingFunc, logger, set_verbose_debug
+from lightrag.llm.openai import openai_complete_if_cache
 
 from dotenv import load_dotenv
 
@@ -25,14 +26,16 @@ def configure_logging():
 
     # Get log directory path from environment variable or use current directory
     log_dir = os.getenv("LOG_DIR", os.getcwd())
-    log_file_path = os.path.abspath(os.path.join(log_dir, "lightrag_ollama_demo.log"))
+    log_file_path = os.path.abspath(
+        os.path.join(log_dir, "lightrag_ollama_demo.log"))
 
     print(f"\nLightRAG compatible demo log file: {log_file_path}\n")
     os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
     # Get log file max size and backup count from environment variables
     log_max_bytes = int(os.getenv("LOG_MAX_BYTES", 10485760))  # Default 10MB
-    log_backup_count = int(os.getenv("LOG_BACKUP_COUNT", 5))  # Default 5 backups
+    log_backup_count = int(
+        os.getenv("LOG_BACKUP_COUNT", 5))  # Default 5 backups
 
     logging.config.dictConfig(
         {
@@ -81,24 +84,47 @@ if not os.path.exists(WORKING_DIR):
     os.mkdir(WORKING_DIR)
 
 
+async def llm_model_func(
+    prompt, system_prompt=None, history_messages=[], keyword_extraction=False, **kwargs
+) -> str:
+    return await openai_complete_if_cache(
+        os.getenv("LLM_MODEL", "deepseek-chat"),
+        prompt,
+        system_prompt=system_prompt,
+        history_messages=history_messages,
+        # api_key=os.getenv("LLM_BINDING_API_KEY") or os.getenv(
+        #     "OPENAI_API_KEY"),
+        api_key="xxx",
+        # base_url=os.getenv("LLM_BINDING_HOST", "https://api.deepseek.com"),
+        base_url="http://121.40.102.152:9966",
+        **kwargs,
+    )
+
+
 async def initialize_rag():
     rag = LightRAG(
         working_dir=WORKING_DIR,
-        llm_model_func=ollama_model_complete,
+        # llm_model_func=ollama_model_complete,
+        llm_model_func=llm_model_func,
         llm_model_name=os.getenv("LLM_MODEL", "qwen2.5-coder:7b"),
         summary_max_tokens=8192,
-        llm_model_kwargs={
-            "host": os.getenv("LLM_BINDING_HOST", "http://localhost:11434"),
-            "options": {"num_ctx": 8192},
-            "timeout": int(os.getenv("TIMEOUT", "300")),
-        },
+        # llm_model_kwargs={
+        #     # "host": os.getenv("LLM_BINDING_HOST", "http://localhost:11434"),
+        #     "host": "http://121.40.102.152:9966",
+        #     "options": {"num_ctx": 8192},
+        #     "timeout": int(os.getenv("TIMEOUT", "300")),
+        # },
         embedding_func=EmbeddingFunc(
-            embedding_dim=int(os.getenv("EMBEDDING_DIM", "1024")),
-            max_token_size=int(os.getenv("MAX_EMBED_TOKENS", "8192")),
+            # embedding_dim=int(os.getenv("EMBEDDING_DIM", "1024")),
+            embedding_dim=768,
+            # max_token_size=int(os.getenv("MAX_EMBED_TOKENS", "8192")),
+            max_token_size=8192,
             func=lambda texts: ollama_embed(
                 texts,
-                embed_model=os.getenv("EMBEDDING_MODEL", "bge-m3:latest"),
-                host=os.getenv("EMBEDDING_BINDING_HOST", "http://localhost:11434"),
+                # embed_model=os.getenv("EMBEDDING_MODEL", "bge-m3:latest"),
+                embed_model="nomic-embed-text:latest",
+                host=os.getenv("EMBEDDING_BINDING_HOST",
+                               "http://localhost:11434"),
             ),
         ),
     )
