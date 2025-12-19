@@ -1,0 +1,7 @@
+curl --request POST \
+  --url http://localhost:11434/api/embeddings \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data '{
+  "model": "nomic-embed-text",
+  "prompt": "The sky is blue because of Rayleigh scattering"
+}'
