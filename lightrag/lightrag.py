@@ -1609,7 +1609,10 @@ class LightRAG:
         4. Process each chunk for entity and relation extraction
         5. Update the document status
         """
-
+        """
+        workspace: 工作区，用于实现数据隔离，确保不同工作区之间的数据完全独立
+        namespace: 命名空间，用于区分不同类型的存储（如文档、实体、关系等）
+        """
         # Get pipeline status shared data and lock
         pipeline_status = await get_namespace_data(
             "pipeline_status", workspace=self.workspace

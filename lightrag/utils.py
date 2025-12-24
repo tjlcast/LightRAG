@@ -618,7 +618,7 @@ def priority_limit_async_func_call(
         # Enhanced task state management
         task_states = {}  # task_id -> TaskState
         task_states_lock = asyncio.Lock()
-        active_futures = weakref.WeakSet()
+        active_futures = weakref.WeakSet()  # 不影响future的引用计数
         reinit_count = 0
 
         async def worker():
