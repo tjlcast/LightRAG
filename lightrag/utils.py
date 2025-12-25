@@ -714,6 +714,7 @@ def priority_limit_async_func_call(
                 logger.debug(f"{queue_name}: Worker exiting")
 
         async def enhanced_health_check():
+            """健康机制的超时检查是通过future通知调用方(生产者)超时情况, 不负责通知执行中的被调用方(消费者)的超时"""
             """Enhanced health check with stuck task detection and recovery"""
             nonlocal initialized
             try:
@@ -818,7 +819,7 @@ def priority_limit_async_func_call(
                 for _ in range(workers_needed):
                     task = asyncio.create_task(worker())
                     tasks.add(task)
-                    task.add_done_callback(tasks.discard)
+                    task.add_done_callback(tasks.discard) # 在 task 中添加 tasks 的回调, 任务完成的时候用于从 tasks 中删除自己
 
                 # Start enhanced health check
                 worker_health_check_task = asyncio.create_task(enhanced_health_check())
@@ -972,6 +973,7 @@ def priority_limit_async_func_call(
                         future.cancel()
 
                     # Wait for worker cleanup with timeout
+                    # 这里承诺方有两个: 1. 健康机制的任务清理; 2. worker的任务清理, 共同保证超时任务会从 task_states 移除;
                     cleanup_start = asyncio.get_event_loop().time()
                     while (
                         task_id in task_states
