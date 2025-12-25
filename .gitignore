@@ -37,7 +37,6 @@ temp/
 
 # IDE / Editor Files
 .idea/
-.vscode/
 .vscode/settings.json
 
 # Framework-specific files

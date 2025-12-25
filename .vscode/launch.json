@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug LightRAG jialtang Demo",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/lightrag_jialtang_demo.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "LOG_DIR": "${workspaceFolder}/logs"
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Debug LightRAG API Server",
+            "type": "python",
+            "request": "launch",
+            "module": "lightrag.api.lightrag_server",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "args": [
+                "--input-dir",
+                "./inputs"
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
