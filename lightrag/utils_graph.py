@@ -942,6 +942,12 @@ async def acreate_entity(
                 "file_path": entity_data.get("file_path", "manual_creation"),
                 "created_at": int(time.time()),
             }
+            
+            # Filter and add remaining key-value pairs from entity_data to node_data
+            reserved_keys = {"entity_type", "description", "source_id", "file_path", "created_at"}
+            for key, value in entity_data.items():
+                if key not in reserved_keys and not key.startswith('_'):  # Skip private attributes
+                    node_data[key] = value
 
             # Add entity to knowledge graph
             await chunk_entity_relation_graph.upsert_node(entity_name, node_data)

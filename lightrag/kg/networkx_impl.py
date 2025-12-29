@@ -24,13 +24,13 @@ load_dotenv(dotenv_path=".env", override=False)
 @dataclass
 class NetworkXStorage(BaseGraphStorage):
     @staticmethod
-    def load_nx_graph(file_name) -> nx.Graph:
+    def load_nx_graph(file_name) -> nx.MultiDiGraph:
         if os.path.exists(file_name):
             return nx.read_graphml(file_name)
         return None
 
     @staticmethod
-    def write_nx_graph(graph: nx.Graph, file_name, workspace="_"):
+    def write_nx_graph(graph: nx.MultiDiGraph, file_name, workspace="_"):
         logger.info(
             f"[{workspace}] Writing graph with {graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges"
         )
@@ -64,7 +64,7 @@ class NetworkXStorage(BaseGraphStorage):
             logger.info(
                 f"[{self.workspace}] Created new empty graph file: {self._graphml_xml_file}"
             )
-        self._graph = preloaded_graph or nx.Graph()
+        self._graph = preloaded_graph or nx.MultiDiGraph()
 
     async def initialize(self):
         """Initialize storage data"""
@@ -88,7 +88,7 @@ class NetworkXStorage(BaseGraphStorage):
                 )
                 # Reload data
                 self._graph = (
-                    NetworkXStorage.load_nx_graph(self._graphml_xml_file) or nx.Graph()
+                    NetworkXStorage.load_nx_graph(self._graphml_xml_file) or nx.MultiDiGraph()
                 )
                 # Reset update flag
                 self.storage_updated.value = False
@@ -443,14 +443,15 @@ class NetworkXStorage(BaseGraphStorage):
             seen_nodes.add(str(node))
 
         # Add edges to result
+        _edges = subgraph.edges()
         for edge in subgraph.edges():
             source, target = edge
             # Esure unique edge_id for undirect graph
-            if str(source) > str(target):
-                source, target = target, source
+            # if str(source) > str(target):
+            #     source, target = target, source
             edge_id = f"{source}-{target}"
-            if edge_id in seen_edges:
-                continue
+            # if edge_id in seen_edges:
+            #     continue
 
             edge_data = dict(subgraph.edges[edge])
 
@@ -510,7 +511,7 @@ class NetworkXStorage(BaseGraphStorage):
                     f"[{self.workspace}] Graph was updated by another process, reloading..."
                 )
                 self._graph = (
-                    NetworkXStorage.load_nx_graph(self._graphml_xml_file) or nx.Graph()
+                    NetworkXStorage.load_nx_graph(self._graphml_xml_file) or nx.MultiDiGraph()
                 )
                 # Reset update flag
                 self.storage_updated.value = False
@@ -553,7 +554,7 @@ class NetworkXStorage(BaseGraphStorage):
                 # delete _client_file_name
                 if os.path.exists(self._graphml_xml_file):
                     os.remove(self._graphml_xml_file)
-                self._graph = nx.Graph()
+                self._graph = nx.MultiDiGraph()
                 # Notify other processes that data has been updated
                 await set_all_update_flags(self.namespace, workspace=self.workspace)
                 # Reset own update flag to avoid self-reloading
