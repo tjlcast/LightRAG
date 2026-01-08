@@ -1,6 +1,6 @@
-# Prepare env
+## Prepare env
 
-## Backend
+### Backend
 
 ```
 python -m venv .venv
@@ -11,7 +11,7 @@ pip install "lightrag-hku[api]"
 ```
 
 
-## Frontend
+### Frontend
 Following [https://bun.sh/docs/installation](https://bun.sh/docs/installation) to install bun
 
 ```
@@ -20,7 +20,7 @@ bun run build
 ```
 
 
-## Data schema
+## Build Data schema
 
 ### 从大模型回复中提取ER
 [_process_extraction_result](./lightrag/operate.py#L2860)
