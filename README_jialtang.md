@@ -141,6 +141,18 @@ keywords使用并集
 	[插入graph](./lightrag/operate.py#L2184)
 	[插入entity_chunk](./lightrag/operate.py#L2190)
 	[插入vdb](./lightrag/operate.py#L2212)
+	```
+	entity_content = f"{need_insert_id}\n{description}"
+    vdb_data = {
+        entity_vdb_id: {
+            "content": entity_content,
+            "entity_name": need_insert_id,
+            "source_id": source_id,
+            "entity_type": "UNKNOWN",
+            "file_path": file_path,
+        }
+    }
+	```
 存在则进行更新节点
 	从 entity_chunks_storage 和 knowledge_graph_inst 中获取 source_id, 与relation中的source_id合并
 	[合并好后的 source_id 更新 entity_chunk_storage](./lightrag/operate.py#L2266)
@@ -148,6 +160,7 @@ keywords使用并集
 	[使用限制后的source_id更新knowledge_graph_inst.upsert_node](./lightrag/operate.py#L2296)
 	[更新 entity_vdb ](./lightrag/operate.py#L2212)
 	```
+	entity_content = f"{need_insert_id}\n{description}"
 	entity_vdb_id: {
         "content": entity_content,
         "entity_name": need_insert_id,
@@ -161,6 +174,7 @@ keywords使用并集
 [更新 graph](./lightrag/operate.py#L2335)
 [更新 relationships_vdb 删除旧的插入新的](./lightrag/operate.py#L2388)
 ```
+rel_content = f"{keywords}\t{src_id}\n{tgt_id}\n{description}"
 vdb_data = {
     rel_vdb_id: {
         "src_id": src_id,
